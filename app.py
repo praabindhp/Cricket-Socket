@@ -7,7 +7,8 @@ socketio = SocketIO(app)
 
 @app.route("/", methods = ['GET', 'POST'])
 def index():
-    return render_template("index.html")
+    messages = ['Message One', 'Message Two', 'Message Three']
+    return render_template("index.html", messages = messages)
 
 @socketio.on('message')
 def handleMessage(msg):
