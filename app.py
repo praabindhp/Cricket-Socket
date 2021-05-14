@@ -5,15 +5,25 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
 socketio = SocketIO(app)
 
-@app.route("/", methods = ['GET', 'POST'])
-def index():
-    messages = ['Message One', 'Message Two', 'Message Three']
-    return render_template("index.html", messages = messages)
+history = []
 
 @socketio.on('message')
 def handleMessage(msg):
+    history.append(msg)
     print('Message : ' + msg)
-    send(msg, broadcast = True)
+    print(history)
+    send(msg, broadcast=True)
+    return render_template("index.html", history = history)
+
+@app.route("/")
+def start():
+    print(history)
+    return render_template("index.html")
+
+@app.route("/chat")
+def chat():
+    print(history)
+    return render_template("chatPage.html")
 
 if __name__ == '__main__':
-    socketio.run(app)
+	socketio.run(app)
